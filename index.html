@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hui Ju Fan | Olfactory Perception & HCI Researcher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">Hui Ju Fan</a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#research">Research</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-container">
+            <div class="hero-text">
+                <p class="hero-greeting">Hello, I'm</p>
+                <h1 class="hero-name">Hui Ju Fan</h1>
+                <p class="hero-tagline">Exploring the intersection of <em>olfactory perception</em>,<br>
+                <em>chemical sensing</em>, and <em>human-computer interaction</em></p>
+                <p class="hero-affiliation">M.S. Marketing @ UT Dallas &bull; Research Collaborator @ MIT CSAIL</p>
+                <div class="hero-cta">
+                    <a href="#research" class="btn btn-primary">View My Research</a>
+                    <a href="#contact" class="btn btn-outline">Get in Touch</a>
+                </div>
+            </div>
+            <div class="hero-portrait">
+                <div class="portrait-placeholder">
+                    <span>HF</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-lead">
+                        I am a Master's student in Marketing at <strong>The University of Texas at Dallas</strong>,
+                        with a deep passion for understanding how humans perceive and interact with chemical stimuli.
+                        My work bridges consumer psychology, sensory science, and engineering.
+                    </p>
+                    <p>
+                        Currently, I collaborate with <strong>Professor Jas Brooks</strong> at
+                        <strong>MIT EECS & CSAIL</strong> on perceptual engineering research, developing
+                        electronic tongue technology for chemical safety applications. This work combines
+                        sensor design, machine learning, and psychophysical methods to create systems
+                        that augment human chemical perception.
+                    </p>
+                    <p>
+                        My journey into HCI began with founding <strong>PerVenture</strong>, a startup exploring
+                        VR-based olfactory interfaces for fragrance shopping. The technical challenges I encountered
+                        there&mdash;particularly the gap between digital and chemical modalities&mdash;motivated me
+                        to pursue research at the frontier of perceptual engineering.
+                    </p>
+                    <p class="about-goal">
+                        <strong>I am seeking PhD positions</strong> where I can investigate olfactory perception,
+                        chemical interfaces, and multisensory HCI&mdash;designing systems that let people sense,
+                        understand, and interact with the chemical world in new ways.
+                    </p>
+                </div>
+                <div class="about-sidebar">
+                    <div class="info-card">
+                        <h3>Research Interests</h3>
+                        <ul class="interest-tags">
+                            <li>Olfactory Perception</li>
+                            <li>Human-Computer Interaction</li>
+                            <li>Chemical Sensing</li>
+                            <li>Perceptual Engineering</li>
+                            <li>Multisensory Interfaces</li>
+                            <li>Consumer Psychology</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>Education</h3>
+                        <div class="edu-item">
+                            <strong>M.S. Marketing</strong>
+                            <span>UT Dallas, 2026</span>
+                        </div>
+                        <div class="edu-item">
+                            <strong>B.A. International Business</strong>
+                            <span>Soochow University, 2024</span>
+                            <span class="gpa">GPA: 3.9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section class="section section-alt" id="research">
+        <div class="container">
+            <h2 class="section-title">Research</h2>
+
+            <div class="research-item">
+                <div class="research-header">
+                    <div class="research-icon">&#9880;</div>
+                    <div>
+                        <h3>Chemical Safety via Electronic Tongue Technology</h3>
+                        <p class="research-meta">MIT EECS & CSAIL | Advisor: Prof. Jas Brooks | Apr 2025 &ndash; Present</p>
+                    </div>
+                </div>
+                <p class="research-desc">
+                    Developing an electronic tongue system to prevent hazardous chemical interactions
+                    between household cleaning products. When common products like bleach and toilet bowl
+                    cleaner are mixed, they can produce toxic chlorine gas&mdash;our system detects and
+                    warns users before dangerous combinations occur.
+                </p>
+                <ul class="research-details">
+                    <li>Built a comprehensive dataset of <strong>44 cleaning products</strong> with multiple
+                        ion-selective electrode measurements for training a chemical identification system</li>
+                    <li>Designed and implemented <strong>sensor array circuitry</strong> using Arduino-based
+                        microcontrollers interfaced with ion-selective electrodes for real-time chemical detection</li>
+                    <li>Applied dimensionality reduction techniques (<strong>PCA, t-SNE</strong>) to visualize
+                        chemical signatures and identify discriminative markers across surfactant-based products</li>
+                </ul>
+                <div class="research-tags">
+                    <span>Arduino</span><span>Python</span><span>PCA</span><span>t-SNE</span>
+                    <span>Ion-Selective Electrodes</span><span>Signal Processing</span>
+                </div>
+            </div>
+
+            <div class="research-item">
+                <div class="research-header">
+                    <div class="research-icon">&#128172;</div>
+                    <div>
+                        <h3>Consumer Psychology & Linguistic Persuasion</h3>
+                        <p class="research-meta">National Science Council, Taiwan | Jul 2023 &ndash; Mar 2024</p>
+                    </div>
+                </div>
+                <p class="research-desc">
+                    Investigated how homophonic puns interact with idiomatic phrases to influence consumer
+                    perception, information processing, and purchase behavior.
+                </p>
+                <ul class="research-details">
+                    <li>Found a <strong>40% increase in perceived playfulness</strong> when homophonic puns
+                        were paired with idiomatic phrases</li>
+                    <li>Demonstrated <strong>31% enhancement in processing fluency</strong> through
+                        linguistic wordplay mechanisms</li>
+                    <li>Conducted experimental studies with <strong>200+ participants</strong> using
+                        rigorous statistical methods (SPSS, R)</li>
+                    <li>Awarded <strong>National Science Council Scholarship</strong> based on research outcomes</li>
+                </ul>
+                <div class="research-tags">
+                    <span>Experimental Design</span><span>SPSS</span><span>R</span>
+                    <span>Consumer Psychology</span><span>Psycholinguistics</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <div class="container">
+            <h2 class="section-title">Entrepreneurial Projects</h2>
+
+            <div class="project-card featured">
+                <div class="project-badge">Co-Founder</div>
+                <h3>PerVenture &mdash; VR-Olfactory Shopping Platform</h3>
+                <p class="project-period">October 2022 &ndash; October 2024 (Paused for graduate studies)</p>
+                <p class="project-desc">
+                    Founded and led a cross-functional team of 5&ndash;6 members to develop a VR-based
+                    olfactory interface for immersive fragrance shopping&mdash;addressing the fundamental
+                    challenge that scent cannot be transmitted digitally.
+                </p>
+                <div class="project-highlights">
+                    <div class="highlight">
+                        <span class="highlight-number">300+</span>
+                        <span class="highlight-label">User research participants</span>
+                    </div>
+                    <div class="highlight">
+                        <span class="highlight-number">80%</span>
+                        <span class="highlight-label">Use fragrance but can't shop online</span>
+                    </div>
+                </div>
+                <ul class="project-details">
+                    <li>Prototyped 3D virtual environments using <strong>Unity & C#</strong> for personalized
+                        perfume consultation</li>
+                    <li>Pitched to angel investors, generating active interest and identifying the critical
+                        technical barrier: olfactory hardware</li>
+                    <li>This experience directly motivated my transition into perceptual engineering and HCI research</li>
+                </ul>
+                <div class="research-tags">
+                    <span>Unity</span><span>C#</span><span>VR</span>
+                    <span>Olfactory Interface</span><span>User Research</span>
+                </div>
+            </div>
+
+            <div class="project-grid">
+                <div class="project-card small">
+                    <h4>L'Oreal Brandstorm Competition</h4>
+                    <p class="project-period">Team Leader | Oct &ndash; Dec 2022</p>
+                    <p>Developed a business proposal for a VR perfume experience application with personalized
+                       fragrance consultation using immersive technology.</p>
+                </div>
+                <div class="project-card small">
+                    <h4>Unilever Future Leaders' League</h4>
+                    <p class="project-period">Team Leader | Nov &ndash; Dec 2022</p>
+                    <p>Created strategic recommendations for Knorr to engage younger consumers
+                       through digital-first marketing in the post-COVID era.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="section section-alt" id="experience">
+        <div class="container">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>Teaching Assistant</h3>
+                        <p class="timeline-meta">Soochow University, Dept. of International Business | Sep 2023 &ndash; Jun 2024</p>
+                        <p>Taught Money and Banking (undergraduate level). Improved student performance by
+                           an average of 10% through targeted tutoring and helped the bottom 30% of students
+                           pass the course through individualized mentoring.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>Brandstorm Campus Ambassador</h3>
+                        <p class="timeline-meta">L'Oreal Group, Taiwan | Oct 2023 &ndash; Apr 2024</p>
+                        <p>Drove 100% increase in competition participants and 67% growth in website traffic
+                           through social media campaigns and targeted outreach strategies.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>Sales Assistant Intern</h3>
+                        <p class="timeline-meta">Ocean Technologies Co., Ltd, Taiwan | Mar &ndash; Aug 2020</p>
+                        <p>Designed promotional marketing activities and provided digital solutions,
+                           contributing to 200% sales growth.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+        <div class="container">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Programming</h3>
+                    <div class="skill-items">
+                        <span>Python</span><span>R</span><span>C#</span><span>MATLAB</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Hardware & Sensing</h3>
+                    <div class="skill-items">
+                        <span>Arduino</span><span>Ion-Selective Electrodes</span>
+                        <span>Sensor Integration</span><span>Circuit Design</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Data & Analysis</h3>
+                    <div class="skill-items">
+                        <span>PCA / t-SNE</span><span>SPSS</span><span>Tableau</span>
+                        <span>Machine Learning</span><span>Signal Processing</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Research Methods</h3>
+                    <div class="skill-items">
+                        <span>Experimental Design</span><span>Psychophysical Testing</span>
+                        <span>User Research</span><span>Survey Design</span>
+                        <span>Multivariate Analysis</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Tools & Platforms</h3>
+                    <div class="skill-items">
+                        <span>Unity (VR)</span><span>Git</span>
+                        <span>Google Analytics</span><span>Excel (Advanced)</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Languages</h3>
+                    <div class="skill-items">
+                        <span>English</span><span>Mandarin</span><span>Japanese</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section section-alt" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="contact-content">
+                <p class="contact-lead">
+                    I am actively seeking PhD opportunities in olfactory perception, chemical sensing,
+                    and human-computer interaction. I would love to connect with researchers and labs
+                    working in these areas.
+                </p>
+                <div class="contact-grid">
+                    <a href="mailto:fhj.sheri@gmail.com" class="contact-card">
+                        <div class="contact-icon">&#9993;</div>
+                        <span class="contact-label">Email</span>
+                        <span class="contact-value">fhj.sheri@gmail.com</span>
+                    </a>
+                    <div class="contact-card">
+                        <div class="contact-icon">&#128205;</div>
+                        <span class="contact-label">Location</span>
+                        <span class="contact-value">Garland, Texas</span>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">&#127891;</div>
+                        <span class="contact-label">Affiliation</span>
+                        <span class="contact-value">UT Dallas &bull; MIT CSAIL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Hui Ju Fan. Built for PhD applications.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
