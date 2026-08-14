@@ -188,10 +188,10 @@
 const NUS  = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
 const TX   = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
 const STEPS = 10;
-const HEATER = [320,100,100,100,200,200,200,320,320,320];
+const HEATER = [320,100,320,100,200,320,200,150,250,320];
 
 const $ = id => document.getElementById(id);
-let device = null, buffer = '', rows = [], recording = false;
+let device = null, buffer = '', rows = [], recording = false, saved = true;
 let latest = new Array(STEPS).fill(null), peak = 1;
 
 if (!navigator.bluetooth) $('unsupported').hidden = false;
@@ -227,7 +227,7 @@ function drawComb(){
     const h = v === null ? 0 : Math.max(2, (v/peak) * (H - 58));
     const c = heaterColor(HEATER[i]);
     svg += `<rect x="${x}" y="${H-20-h}" width="${bw}" height="${h}" fill="${c}" opacity="0.9"/>`;
-    svg += `<text x="${x+bw/2}" y="${H-7}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-soft)">${i}</text>`;
+    svg += `<text x="${x+bw/2}" y="${H-7}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="var(--ink-soft)">${HEATER[i]}</text>`;
     if (v !== null)
       svg += `<text x="${x+bw/2}" y="${H-26-h}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="var(--ink-soft)">${Math.round(v/1000)}k</text>`;
   }
@@ -299,6 +299,15 @@ $('connect').onclick = async () => {
 $('disconnect').onclick = () => { if (device && device.gatt.connected) device.gatt.disconnect(); };
 
 $('rec').onclick = () => {
+  if (!recording){
+    // Each recording is its own file. Without this the buffer carries over and
+    // the next download silently contains every earlier odour too.
+    if (rows.length && !saved &&
+        !confirm(rows.length + ' rows have not been downloaded. Discard them and start a new recording?')) return;
+    rows = []; saved = false;
+    $('mRows').textContent = '0';
+    $('dl').disabled = true; $('clr').disabled = true;
+  }
   recording = !recording;
   $('rec').textContent = recording ? 'Stop recording' : 'Start recording';
   setState(recording ? 'recording' : 'connected', recording ? 'rec' : 'on');
@@ -312,6 +321,7 @@ $('dl').onclick = () => {
   a.download = `enose_${$('odor').value}_${$('dist').value}cm_${$('motion').value}_r${$('round').value}.csv`;
   a.click();
   URL.revokeObjectURL(a.href);
+  saved = true;
 };
 
 $('clr').onclick = () => {
