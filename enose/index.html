@@ -151,8 +151,16 @@
       </select>
     </div>
     <div>
-      <label for="dist">Distance</label>
-      <select id="dist"><option value="near">near</option><option value="mid">mid</option></select>
+      <label for="dist">Distance (cm)</label>
+      <select id="dist">
+        <option value="2">2 cm</option>
+        <option value="5">5 cm</option>
+        <option value="10">10 cm</option>
+        <option value="15">15 cm</option>
+        <option value="20">20 cm</option>
+        <option value="25">25 cm</option>
+        <option value="30">30 cm</option>
+      </select>
     </div>
     <div>
       <label for="motion">Motion</label>
@@ -297,11 +305,11 @@ $('rec').onclick = () => {
 };
 
 $('dl').onclick = () => {
-  const head = 'odor,distance,motion,round,ts_ms,cycle,step,gas_ohm,temp_c,hum_pct,press_hpa,valid';
+  const head = 'odor,distance_cm,motion,round,ts_ms,cycle,step,gas_ohm,temp_c,hum_pct,press_hpa,valid';
   const blob = new Blob([head + '\n' + rows.join('\n') + '\n'], {type:'text/csv'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `enose_${$('odor').value}_${$('dist').value}_${$('motion').value}_r${$('round').value}.csv`;
+  a.download = `enose_${$('odor').value}_${$('dist').value}cm_${$('motion').value}_r${$('round').value}.csv`;
   a.click();
   URL.revokeObjectURL(a.href);
 };
