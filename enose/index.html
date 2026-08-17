@@ -146,7 +146,10 @@
       <select id="odor">
         <option value="background">background</option>
         <option value="coffee">coffee</option>
-        <option value="garlic">garlic</option>
+        <option value="lemon">lemon</option>
+        <option value="orange">orange</option>
+        <option value="banana">banana</option>
+        <option value="apple">apple</option>
         <option value="vinegar">vinegar</option>
       </select>
     </div>
@@ -175,8 +178,9 @@
     <div style="flex:0 0 auto"><button id="rec" disabled>Start recording</button></div>
     <div style="flex:0 0 auto"><button id="dl" class="ghost" disabled>Download CSV</button></div>
     <div style="flex:0 0 auto"><button id="clr" class="ghost" disabled>Clear</button></div>
+    <div id="tag" style="flex:1 1 auto;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600"></div>
   </div>
-  <p class="hint">Record background first, then coffee, garlic, vinegar. Vinegar last: it lingers on the sensor and contaminates whatever follows.</p>
+  <p class="hint">Record a background before and after every odour. The background is a checkpoint, not just another class: it tells you whether the sensor has drifted since the last one.</p>
 </div>
 
 <div class="panel">
@@ -191,7 +195,7 @@ const STEPS = 10;
 const HEATER = [320,100,320,100,200,320,200,150,250,320];
 
 const $ = id => document.getElementById(id);
-let device = null, buffer = '', rows = [], recording = false, saved = true;
+let device = null, buffer = '', rows = [], recording = false, saved = true, tag = null;
 let latest = new Array(STEPS).fill(null), peak = 1;
 
 if (!navigator.bluetooth) $('unsupported').hidden = false;
@@ -227,7 +231,7 @@ function drawComb(){
     const h = v === null ? 0 : Math.max(2, (v/peak) * (H - 58));
     const c = heaterColor(HEATER[i]);
     svg += `<rect x="${x}" y="${H-20-h}" width="${bw}" height="${h}" fill="${c}" opacity="0.9"/>`;
-    svg += `<text x="${x+bw/2}" y="${H-7}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="var(--ink-soft)">${HEATER[i]}</text>`;
+    svg += `<text x="${x+bw/2}" y="${H-7}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--ink-soft)">${HEATER[i]}\u00B0C</text>`;
     if (v !== null)
       svg += `<text x="${x+bw/2}" y="${H-26-h}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="var(--ink-soft)">${Math.round(v/1000)}k</text>`;
   }
@@ -251,7 +255,7 @@ function handleRow(line){
   $('mPress').textContent = parseFloat(press).toFixed(0);
 
   if (recording){
-    rows.push([$('odor').value, $('dist').value, $('motion').value, $('round').value,
+    rows.push([tag.odor, tag.dist, tag.motion, tag.round,
                ts, cycle, step, gas, temp, hum, press, valid].join(','));
     $('mRows').textContent = rows.length;
     $('dl').disabled = false;
@@ -307,10 +311,17 @@ $('rec').onclick = () => {
     rows = []; saved = false;
     $('mRows').textContent = '0';
     $('dl').disabled = true; $('clr').disabled = true;
+    // Freeze the label now. Changing the dropdown mid-recording would
+    // otherwise relabel rows already captured.
+    tag = { odor: $('odor').value, dist: $('dist').value,
+            motion: $('motion').value, round: $('round').value };
   }
   recording = !recording;
   $('rec').textContent = recording ? 'Stop recording' : 'Start recording';
   setState(recording ? 'recording' : 'connected', recording ? 'rec' : 'on');
+  $('tag').textContent = tag
+    ? `${tag.odor} · ${tag.dist} cm · ${tag.motion} · r${tag.round}` : '';
+  $('tag').style.color = recording ? 'var(--hot)' : 'var(--ink-soft)';
 };
 
 $('dl').onclick = () => {
@@ -318,7 +329,7 @@ $('dl').onclick = () => {
   const blob = new Blob([head + '\n' + rows.join('\n') + '\n'], {type:'text/csv'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `enose_${$('odor').value}_${$('dist').value}cm_${$('motion').value}_r${$('round').value}.csv`;
+  a.download = `enose_${tag.odor}_${tag.dist}cm_${tag.motion}_r${tag.round}.csv`;
   a.click();
   URL.revokeObjectURL(a.href);
   saved = true;
