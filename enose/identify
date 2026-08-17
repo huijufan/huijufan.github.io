@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>E-Nose Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFF1F0;
+    --panel:#FFFFFF;
+    --ink:#141C1A;
+    --ink-soft:#5C6866;
+    --rule:#CDD5D2;
+    --cool:#2E6F95;   /* 100 C */
+    --warm:#9A8C3F;   /* 200 C */
+    --hot:#B8471F;    /* 320 C */
+    --live:#1F7A5A;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    font-size:15px; line-height:1.45;
+    padding:20px 16px 48px; max-width:860px; margin:0 auto;
+  }
+  h1{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:19px; font-weight:600; letter-spacing:-0.01em;
+    margin:0 0 2px;
+  }
+  .sub{font-size:12.5px;color:var(--ink-soft);margin:0 0 20px}
+  .panel{
+    background:var(--panel); border:1px solid var(--rule);
+    border-radius:3px; padding:16px; margin-bottom:14px;
+  }
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:10.5px; font-weight:600; letter-spacing:0.09em;
+    text-transform:uppercase; color:var(--ink-soft);
+    margin:0 0 12px;
+  }
+  button{
+    font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:500;
+    padding:9px 16px; border-radius:2px; border:1px solid var(--ink);
+    background:var(--ink); color:var(--paper); cursor:pointer;
+  }
+  button.ghost{background:transparent;color:var(--ink)}
+  button:disabled{opacity:.32;cursor:not-allowed}
+  button:focus-visible{outline:2px solid var(--cool);outline-offset:2px}
+  select,input[type=text]{
+    font-family:"IBM Plex Mono",monospace; font-size:13px;
+    padding:8px 10px; border:1px solid var(--rule); border-radius:2px;
+    background:var(--panel); color:var(--ink); width:100%;
+  }
+  select:focus-visible,input:focus-visible{outline:2px solid var(--cool);outline-offset:1px}
+  label{
+    display:block; font-family:"IBM Plex Mono",monospace;
+    font-size:10.5px; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:5px;
+  }
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+  .row>div{flex:1 1 130px;min-width:120px}
+  .status{
+    display:flex;align-items:center;gap:8px;
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--rule);flex:none}
+  .dot.on{background:var(--live)}
+  .dot.rec{background:var(--hot);animation:pulse 1.1s infinite}
+  @keyframes pulse{50%{opacity:.25}}
+  @media (prefers-reduced-motion:reduce){.dot.rec{animation:none}}
+
+  /* signature: the heater scan comb */
+  .comb{width:100%;height:210px;display:block}
+  .legend{
+    display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-soft);
+  }
+  .legend i{display:inline-block;width:9px;height:9px;margin-right:5px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+  .cell{background:var(--panel);padding:10px 12px}
+  .cell .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .cell .v{font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:500;margin-top:2px}
+
+  pre{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.5;
+    background:var(--paper);border:1px solid var(--rule);border-radius:2px;
+    padding:10px;height:120px;overflow:auto;margin:0;color:var(--ink-soft);
+  }
+  .warn{
+    border-left:3px solid var(--hot);padding:10px 12px;
+    background:var(--panel);font-size:13px;margin-bottom:14px;
+  }
+  .hint{font-size:12px;color:var(--ink-soft);margin:10px 0 0}
+</style>
+</head>
+<body>
+
+<h1>E-Nose Console</h1>
+<p class="sub">BME688 · 10-step heater scan · BLE</p>
+
+<div id="unsupported" class="warn" hidden>
+  This browser has no Web Bluetooth. Open the page in Chrome on Android, over HTTPS or localhost.
+</div>
+
+<div class="panel">
+  <div class="row">
+    <div style="flex:0 0 auto"><button id="connect">Connect</button></div>
+    <div style="flex:0 0 auto"><button id="disconnect" class="ghost" disabled>Disconnect</button></div>
+    <div class="status" style="flex:1 1 auto;justify-content:flex-end">
+      <span class="dot" id="dot"></span><span id="state">not connected</span>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <p class="eyebrow">Heater scan · live</p>
+  <svg class="comb" id="comb" viewBox="0 0 700 210" preserveAspectRatio="none" role="img"
+       aria-label="Live gas resistance for each of the ten heater steps"></svg>
+  <div class="legend">
+    <span><i style="background:var(--cool)"></i>100 &deg;C</span>
+    <span><i style="background:var(--warm)"></i>200 &deg;C</span>
+    <span><i style="background:var(--hot)"></i>320 &deg;C</span>
+    <span>bar height = gas resistance</span>
+  </div>
+</div>
+
+<div class="panel">
+  <p class="eyebrow">Identify · live</p>
+  <div class="row" style="align-items:center">
+    <div style="flex:1 1 auto">
+      <div id="idName" style="font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:600;line-height:1.1">&mdash;</div>
+      <div id="idWhy" style="font-size:12.5px;color:var(--ink-soft);margin-top:4px">waiting for a full heater cycle</div>
+    </div>
+    <div style="flex:0 0 auto;min-width:150px">
+      <svg id="idBars" viewBox="0 0 150 76" style="width:150px;height:76px" role="img" aria-label="Distance to each reference class"></svg>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="cell"><div class="k">Cycle</div><div class="v" id="mCycle">&mdash;</div></div>
+  <div class="cell"><div class="k">Temp &deg;C</div><div class="v" id="mTemp">&mdash;</div></div>
+  <div class="cell"><div class="k">RH %</div><div class="v" id="mHum">&mdash;</div></div>
+  <div class="cell"><div class="k">hPa</div><div class="v" id="mPress">&mdash;</div></div>
+  <div class="cell"><div class="k">Rows</div><div class="v" id="mRows">0</div></div>
+</div>
+
+<div class="panel" style="margin-top:14px">
+  <p class="eyebrow">Record</p>
+  <div class="row">
+    <div>
+      <label for="odor">Odour</label>
+      <select id="odor">
+        <option value="background">background</option>
+        <option value="coffee">coffee</option>
+        <option value="lemon">lemon</option>
+        <option value="orange">orange</option>
+        <option value="banana">banana</option>
+        <option value="apple">apple</option>
+        <option value="vinegar">vinegar</option>
+      </select>
+    </div>
+    <div>
+      <label for="dist">Distance (cm)</label>
+      <select id="dist">
+        <option value="2">2 cm</option>
+        <option value="5">5 cm</option>
+        <option value="10">10 cm</option>
+        <option value="15">15 cm</option>
+        <option value="20">20 cm</option>
+        <option value="25">25 cm</option>
+        <option value="30">30 cm</option>
+      </select>
+    </div>
+    <div>
+      <label for="motion">Motion</label>
+      <select id="motion"><option value="static">static</option><option value="moving">moving</option></select>
+    </div>
+    <div>
+      <label for="round">Round</label>
+      <input type="text" id="round" value="1" inputmode="numeric">
+    </div>
+  </div>
+  <div class="row" style="margin-top:14px">
+    <div style="flex:0 0 auto"><button id="rec" disabled>Start recording</button></div>
+    <div style="flex:0 0 auto"><button id="dl" class="ghost" disabled>Download CSV</button></div>
+    <div style="flex:0 0 auto"><button id="clr" class="ghost" disabled>Clear</button></div>
+    <div id="tag" style="flex:1 1 auto;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600"></div>
+  </div>
+  <p class="hint">Record a background before and after every odour. The background is a checkpoint, not just another class: it tells you whether the sensor has drifted since the last one.</p>
+</div>
+
+<div class="panel">
+  <p class="eyebrow">Raw stream</p>
+  <pre id="log">waiting for connection</pre>
+</div>
+
+<script>
+const NUS  = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+const TX   = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
+const STEPS = 10;
+const HEATER = [320,100,320,100,200,320,200,150,250,320];
+
+// Reference classes, measured 2 cm inside a covered container.
+// Two features, both ratios between heater steps, so concentration largely
+// divides out and only the shape of the response is compared:
+//   s7/s8  gas resistance at 150 C over 250 C
+//   s1/s3  first 100 C dwell over the second
+// Leave-one-cycle-out on the recorded data gives 97.9% from a single cycle.
+// The spread values are the measured per-cycle standard deviations, used to
+// weight the two axes so the noisier one does not dominate.
+const CLASSES = [
+  { name:'background', s78:7.865, s13:1.057 },
+  { name:'coffee',     s78:7.292, s13:1.115 },
+  { name:'vinegar',    s78:5.265, s13:1.029 },
+  { name:'lemon',      s78:2.656, s13:1.089 }
+];
+const SPREAD = { s78:1.90, s13:0.036 };
+const SMOOTH = 3;            // cycles averaged before deciding
+let recent = [];             // rolling window of {s78, s13}
+
+const $ = id => document.getElementById(id);
+let device = null, buffer = '', rows = [], recording = false, saved = true, tag = null;
+let latest = new Array(STEPS).fill(null), peak = 1;
+
+if (!navigator.bluetooth) $('unsupported').hidden = false;
+
+function setState(text, cls){
+  $('state').textContent = text;
+  $('dot').className = 'dot' + (cls ? ' ' + cls : '');
+}
+
+function logLine(s){
+  const el = $('log');
+  el.textContent = (el.textContent === 'waiting for connection' ? '' : el.textContent) + s + '\n';
+  if (el.textContent.length > 4000) el.textContent = el.textContent.slice(-3000);
+  el.scrollTop = el.scrollHeight;
+}
+
+function heaterColor(t){
+  if (t <= 120) return getComputedStyle(document.documentElement).getPropertyValue('--cool');
+  if (t <= 240) return getComputedStyle(document.documentElement).getPropertyValue('--warm');
+  return getComputedStyle(document.documentElement).getPropertyValue('--hot');
+}
+
+// Signature element: each heater step drawn as its own bar, coloured by the
+// temperature it runs at. This is literally what the sensor is doing.
+function drawComb(){
+  const W = 700, H = 210, pad = 26, gap = 8;
+  const bw = (W - pad*2 - gap*(STEPS-1)) / STEPS;
+  let svg = '';
+  svg += `<line x1="${pad}" y1="${H-20}" x2="${W-pad}" y2="${H-20}" stroke="var(--rule)" stroke-width="1"/>`;
+  for (let i = 0; i < STEPS; i++){
+    const x = pad + i*(bw+gap);
+    const v = latest[i];
+    const h = v === null ? 0 : Math.max(2, (v/peak) * (H - 58));
+    const c = heaterColor(HEATER[i]);
+    svg += `<rect x="${x}" y="${H-20-h}" width="${bw}" height="${h}" fill="${c}" opacity="0.9"/>`;
+    svg += `<text x="${x+bw/2}" y="${H-7}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--ink-soft)">${HEATER[i]}\u00B0C</text>`;
+    if (v !== null)
+      svg += `<text x="${x+bw/2}" y="${H-26-h}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="var(--ink-soft)">${Math.round(v/1000)}k</text>`;
+  }
+  $('comb').innerHTML = svg;
+}
+
+function handleRow(line){
+  const p = line.split(',');
+  if (p.length < 8) return;
+  const [ts, cycle, step, gas, temp, hum, press, valid] = p;
+  const s = parseInt(step, 10), g = parseFloat(gas);
+  if (Number.isNaN(s) || s < 0 || s >= STEPS) return;
+
+  latest[s] = g;
+  peak = Math.max(peak * 0.995, ...latest.filter(v => v !== null));
+  drawComb();
+
+  // Step 9 is the last of the profile, so a full 10-step vector is now in hand.
+  if (s === STEPS - 1) classify();
+
+  $('mCycle').textContent = cycle;
+  $('mTemp').textContent  = parseFloat(temp).toFixed(1);
+  $('mHum').textContent   = parseFloat(hum).toFixed(0);
+  $('mPress').textContent = parseFloat(press).toFixed(0);
+
+  if (recording){
+    rows.push([tag.odor, tag.dist, tag.motion, tag.round,
+               ts, cycle, step, gas, temp, hum, press, valid].join(','));
+    $('mRows').textContent = rows.length;
+    $('dl').disabled = false;
+    $('clr').disabled = false;
+  }
+}
+
+// Nearest centroid in the two-ratio feature space, averaged over the last
+// SMOOTH cycles. Distances are scaled by each feature's spread so neither
+// axis dominates purely because its numbers are larger.
+function classify(){
+  if (latest.some(v => v === null)) return;   // need every step at least once
+  recent.push({ s78: latest[7]/latest[8], s13: latest[1]/latest[3] });
+  if (recent.length > SMOOTH) recent.shift();
+
+  const s78 = recent.reduce((a,r) => a + r.s78, 0) / recent.length;
+  const s13 = recent.reduce((a,r) => a + r.s13, 0) / recent.length;
+
+  const d = CLASSES.map(c => Math.hypot((c.s78 - s78)/SPREAD.s78,
+                                        (c.s13 - s13)/SPREAD.s13));
+  const best = d.indexOf(Math.min(...d));
+  const sorted = [...d].sort((x,y) => x - y);
+  const margin = sorted[1] / (sorted[0] || 1e-9);   // how clear-cut the win is
+
+  $('idName').textContent = CLASSES[best].name;
+  $('idName').style.color = margin < 1.4 ? 'var(--ink-soft)' : 'var(--ink)';
+  $('idWhy').textContent =
+    `s7/s8 ${s78.toFixed(2)} · s1/s3 ${s13.toFixed(3)} · ` +
+    (margin < 1.4 ? 'close call, treat as uncertain'
+                  : `${margin.toFixed(1)}x closer than the next class`);
+
+  // Shorter bar = closer match. Inverted so the winner reads as the tallest.
+  const W = 150, H = 76, n = CLASSES.length, bw = W/n - 8, dmax = Math.max(...d, 1e-9);
+  let svg = '';
+  CLASSES.forEach((c, i) => {
+    const h = Math.max(2, (1 - d[i]/dmax) * (H - 18));
+    const x = i * (W/n) + 4;
+    svg += `<rect x="${x}" y="${H-14-h}" width="${bw}" height="${h}" `
+         + `fill="${i===best ? 'var(--live)' : 'var(--rule)'}"/>`;
+    svg += `<text x="${x+bw/2}" y="${H-3}" text-anchor="middle" `
+         + `font-family="IBM Plex Mono, monospace" font-size="8" `
+         + `fill="var(--ink-soft)">${c.name.slice(0,4)}</text>`;
+  });
+  $('idBars').innerHTML = svg;
+}
+
+function onData(e){
+  buffer += new TextDecoder().decode(e.target.value);
+  let nl;
+  while ((nl = buffer.indexOf('\n')) >= 0){
+    const line = buffer.slice(0, nl).trim();
+    buffer = buffer.slice(nl + 1);
+    if (!line || line.startsWith('#')) continue;
+    logLine(line);
+    handleRow(line);
+  }
+}
+
+$('connect').onclick = async () => {
+  try{
+    setState('scanning', '');
+    device = await navigator.bluetooth.requestDevice({
+      filters: [{ namePrefix: 'ENose' }], optionalServices: [NUS]
+    });
+    device.addEventListener('gattserverdisconnected', () => {
+      setState('not connected', '');
+      $('connect').disabled = false; $('disconnect').disabled = true;
+      $('rec').disabled = true; recording = false; $('rec').textContent = 'Start recording';
+    });
+    const server = await device.gatt.connect();
+    const svc = await server.getPrimaryService(NUS);
+    const ch  = await svc.getCharacteristic(TX);
+    await ch.startNotifications();
+    ch.addEventListener('characteristicvaluechanged', onData);
+
+    setState('connected', 'on');
+    $('connect').disabled = true; $('disconnect').disabled = false; $('rec').disabled = false;
+  }catch(err){
+    setState('not connected', '');
+    logLine('connect failed: ' + err.message);
+  }
+};
+
+$('disconnect').onclick = () => { if (device && device.gatt.connected) device.gatt.disconnect(); };
+
+$('rec').onclick = () => {
+  if (!recording){
+    // Each recording is its own file. Without this the buffer carries over and
+    // the next download silently contains every earlier odour too.
+    if (rows.length && !saved &&
+        !confirm(rows.length + ' rows have not been downloaded. Discard them and start a new recording?')) return;
+    rows = []; saved = false;
+    $('mRows').textContent = '0';
+    $('dl').disabled = true; $('clr').disabled = true;
+    // Freeze the label now. Changing the dropdown mid-recording would
+    // otherwise relabel rows already captured.
+    tag = { odor: $('odor').value, dist: $('dist').value,
+            motion: $('motion').value, round: $('round').value };
+  }
+  recording = !recording;
+  $('rec').textContent = recording ? 'Stop recording' : 'Start recording';
+  setState(recording ? 'recording' : 'connected', recording ? 'rec' : 'on');
+  $('tag').textContent = tag
+    ? `${tag.odor} · ${tag.dist} cm · ${tag.motion} · r${tag.round}` : '';
+  $('tag').style.color = recording ? 'var(--hot)' : 'var(--ink-soft)';
+};
+
+$('dl').onclick = () => {
+  const head = 'odor,distance_cm,motion,round,ts_ms,cycle,step,gas_ohm,temp_c,hum_pct,press_hpa,valid';
+  const blob = new Blob([head + '\n' + rows.join('\n') + '\n'], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `enose_${tag.odor}_${tag.dist}cm_${tag.motion}_r${tag.round}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  saved = true;
+};
+
+$('clr').onclick = () => {
+  if (!confirm('Discard ' + rows.length + ' recorded rows?')) return;
+  rows = []; $('mRows').textContent = '0';
+  $('dl').disabled = true; $('clr').disabled = true;
+};
+
+drawComb();
+</script>
+</body>
+</html>
