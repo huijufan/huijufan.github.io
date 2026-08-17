@@ -130,6 +130,19 @@
   </div>
 </div>
 
+<div class="panel">
+  <p class="eyebrow">Identify · live</p>
+  <div class="row" style="align-items:center">
+    <div style="flex:1 1 auto">
+      <div id="idName" style="font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:600;line-height:1.1">&mdash;</div>
+      <div id="idWhy" style="font-size:12.5px;color:var(--ink-soft);margin-top:4px">waiting for a full heater cycle</div>
+    </div>
+    <div style="flex:0 0 auto;min-width:150px">
+      <svg id="idBars" viewBox="0 0 150 76" style="width:150px;height:76px" role="img" aria-label="Distance to each reference class"></svg>
+    </div>
+  </div>
+</div>
+
 <div class="grid">
   <div class="cell"><div class="k">Cycle</div><div class="v" id="mCycle">&mdash;</div></div>
   <div class="cell"><div class="k">Temp &deg;C</div><div class="v" id="mTemp">&mdash;</div></div>
@@ -194,6 +207,24 @@ const TX   = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
 const STEPS = 10;
 const HEATER = [320,100,320,100,200,320,200,150,250,320];
 
+// Reference classes, measured 2 cm inside a covered container.
+// Two features, both ratios between heater steps, so concentration largely
+// divides out and only the shape of the response is compared:
+//   s7/s8  gas resistance at 150 C over 250 C
+//   s1/s3  first 100 C dwell over the second
+// Leave-one-cycle-out on the recorded data gives 97.9% from a single cycle.
+// The spread values are the measured per-cycle standard deviations, used to
+// weight the two axes so the noisier one does not dominate.
+const CLASSES = [
+  { name:'background', s78:7.865, s13:1.057 },
+  { name:'coffee',     s78:7.292, s13:1.115 },
+  { name:'vinegar',    s78:5.265, s13:1.029 },
+  { name:'lemon',      s78:2.656, s13:1.089 }
+];
+const SPREAD = { s78:1.90, s13:0.036 };
+const SMOOTH = 3;            // cycles averaged before deciding
+let recent = [];             // rolling window of {s78, s13}
+
 const $ = id => document.getElementById(id);
 let device = null, buffer = '', rows = [], recording = false, saved = true, tag = null;
 let latest = new Array(STEPS).fill(null), peak = 1;
@@ -249,6 +280,9 @@ function handleRow(line){
   peak = Math.max(peak * 0.995, ...latest.filter(v => v !== null));
   drawComb();
 
+  // Step 9 is the last of the profile, so a full 10-step vector is now in hand.
+  if (s === STEPS - 1) classify();
+
   $('mCycle').textContent = cycle;
   $('mTemp').textContent  = parseFloat(temp).toFixed(1);
   $('mHum').textContent   = parseFloat(hum).toFixed(0);
@@ -261,6 +295,45 @@ function handleRow(line){
     $('dl').disabled = false;
     $('clr').disabled = false;
   }
+}
+
+// Nearest centroid in the two-ratio feature space, averaged over the last
+// SMOOTH cycles. Distances are scaled by each feature's spread so neither
+// axis dominates purely because its numbers are larger.
+function classify(){
+  if (latest.some(v => v === null)) return;   // need every step at least once
+  recent.push({ s78: latest[7]/latest[8], s13: latest[1]/latest[3] });
+  if (recent.length > SMOOTH) recent.shift();
+
+  const s78 = recent.reduce((a,r) => a + r.s78, 0) / recent.length;
+  const s13 = recent.reduce((a,r) => a + r.s13, 0) / recent.length;
+
+  const d = CLASSES.map(c => Math.hypot((c.s78 - s78)/SPREAD.s78,
+                                        (c.s13 - s13)/SPREAD.s13));
+  const best = d.indexOf(Math.min(...d));
+  const sorted = [...d].sort((x,y) => x - y);
+  const margin = sorted[1] / (sorted[0] || 1e-9);   // how clear-cut the win is
+
+  $('idName').textContent = CLASSES[best].name;
+  $('idName').style.color = margin < 1.4 ? 'var(--ink-soft)' : 'var(--ink)';
+  $('idWhy').textContent =
+    `s7/s8 ${s78.toFixed(2)} · s1/s3 ${s13.toFixed(3)} · ` +
+    (margin < 1.4 ? 'close call, treat as uncertain'
+                  : `${margin.toFixed(1)}x closer than the next class`);
+
+  // Shorter bar = closer match. Inverted so the winner reads as the tallest.
+  const W = 150, H = 76, n = CLASSES.length, bw = W/n - 8, dmax = Math.max(...d, 1e-9);
+  let svg = '';
+  CLASSES.forEach((c, i) => {
+    const h = Math.max(2, (1 - d[i]/dmax) * (H - 18));
+    const x = i * (W/n) + 4;
+    svg += `<rect x="${x}" y="${H-14-h}" width="${bw}" height="${h}" `
+         + `fill="${i===best ? 'var(--live)' : 'var(--rule)'}"/>`;
+    svg += `<text x="${x+bw/2}" y="${H-3}" text-anchor="middle" `
+         + `font-family="IBM Plex Mono, monospace" font-size="8" `
+         + `fill="var(--ink-soft)">${c.name.slice(0,4)}</text>`;
+  });
+  $('idBars').innerHTML = svg;
 }
 
 function onData(e){
