@@ -59,6 +59,20 @@ body {
     overflow: hidden;
     pointer-events: none;
     user-select: none;
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        #000 0,
+        #000 calc(var(--footer-fade-top, 120vh) - 90px),
+        transparent var(--footer-fade-top, 120vh),
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        #000 0,
+        #000 calc(var(--footer-fade-top, 120vh) - 90px),
+        transparent var(--footer-fade-top, 120vh),
+        transparent 100%
+    );
 }
 
 .flower {
@@ -837,9 +851,44 @@ a.contact-card:hover {
 
 /* ===== Footer ===== */
 .footer {
-    padding: 2rem 0;
+    position: relative;
+    margin-top: -5rem;
+    padding: 1.5rem 1.5rem 3.75rem;
+    background: var(--color-bg-alt);
     text-align: center;
-    border-top: 1px solid var(--color-border);
+    overflow: visible;
+}
+
+.footer-panel {
+    position: relative;
+    z-index: 2;
+    max-width: 1180px;
+    min-height: 180px;
+    margin: 0 auto;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+}
+
+.footer-meadow {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    bottom: -60px;
+    width: calc(100% + 90px);
+    max-width: none;
+    height: auto;
+    transform: translateX(-50%);
+    pointer-events: none;
+    user-select: none;
+}
+
+.footer-content {
+    position: relative;
+    z-index: 2;
+    padding-top: 2rem;
+    padding-bottom: 7.5rem;
 }
 
 .footer p {
@@ -921,6 +970,25 @@ a.contact-card:hover {
         flex-direction: column;
         gap: 1rem;
     }
+
+    .footer {
+        margin-top: -4rem;
+        padding: 1.25rem 1.5rem 2.8rem;
+    }
+
+    .footer-panel {
+        min-height: 160px;
+    }
+
+    .footer-meadow {
+        width: calc(100% + 150px);
+        bottom: -45px;
+    }
+
+    .footer-content {
+        padding-top: 1.6rem;
+        padding-bottom: 6.8rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -966,6 +1034,29 @@ a.contact-card:hover {
 
     .section {
         padding: 3rem 0;
+    }
+
+    .footer {
+        margin-top: -2.75rem;
+        padding: 1rem 0.75rem 2.2rem;
+    }
+
+    .footer-panel {
+        min-height: 145px;
+    }
+
+    .footer-meadow {
+        width: 185%;
+        bottom: -35px;
+    }
+
+    .footer-content {
+        padding-top: 1.25rem;
+        padding-bottom: 6rem;
+    }
+
+    .footer p {
+        font-size: 0.78rem;
     }
 }
 

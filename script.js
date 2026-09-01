@@ -46,6 +46,19 @@ function createFlowerField() {
 
 createFlowerField();
 
+// Fade falling flowers naturally into the footer meadow
+const footer = document.querySelector('.footer');
+
+function updateFlowerFooterFade() {
+    if (!flowerField || !footer) return;
+    const footerTop = Math.max(0, footer.getBoundingClientRect().top);
+    flowerField.style.setProperty('--footer-fade-top', `${footerTop}px`);
+}
+
+window.addEventListener('scroll', updateFlowerFooterFade, { passive: true });
+window.addEventListener('resize', updateFlowerFooterFade);
+updateFlowerFooterFade();
+
 navToggle.addEventListener('click', () => {
     navLinks.classList.toggle('active');
 });
