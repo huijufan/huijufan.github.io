@@ -21,6 +21,7 @@
             <ul class="nav-links" id="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#research">Research</a></li>
+                <li><a href="#publications">Publications</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#skills">Skills</a></li>
@@ -28,6 +29,8 @@
             </ul>
         </div>
     </nav>
+
+    <div class="flower-field" id="flower-field" aria-hidden="true"></div>
 
     <!-- Hero Section -->
     <section class="hero" id="hero">
@@ -37,10 +40,10 @@
                 <h1 class="hero-name">Hui Ju Fan</h1>
                 <p class="hero-tagline">Exploring the intersection of <em>olfactory perception</em>,<br>
                 <em>chemical sensing</em>, and <em>human-computer interaction</em></p>
-                <p class="hero-affiliation">M.S. Marketing @ UT Dallas</p>
+                <p class="hero-affiliation">Researcher in olfactory sensing and interactive systems</p>
                 <div class="hero-cta">
                     <a href="#research" class="btn btn-primary">View My Research</a>
-                    <a href="#contact" class="btn btn-outline">Get in Touch</a>
+                    <a href="./Hui-Ju-Fan-CV.pdf" class="btn btn-outline" target="_blank" rel="noopener noreferrer">View My CV</a>
                 </div>
             </div>
             <div class="hero-portrait">
@@ -58,27 +61,15 @@
             <div class="about-content">
                 <div class="about-text">
                     <p class="about-lead">
-                        I am a Master's student in Marketing at <strong>The University of Texas at Dallas</strong>,
-                        with a deep passion for understanding how humans perceive and interact with chemical stimuli.
-                        My work bridges consumer psychology, sensory science, and engineering.
+                        I work at the intersection of <strong>olfactory perception</strong>, chemical sensing,
+                        human-computer interaction, and sensing technologies. I am interested in how sensing
+                        technologies and interactive systems can help people locate, interpret, and interact
+                        with chemical information.
                     </p>
                     <p>
-                        I have collaborated with <strong>Professor Jas Brooks</strong> at
-                        <strong>MIT EECS & CSAIL</strong> on perceptual engineering research, including
-                        electronic tongue technology for chemical safety and vibration effects on human
-                        olfactory direction. These experiences deepened my expertise in sensor design,
-                        machine learning, and psychophysical methods.
-                    </p>
-                    <p>
-                        My journey into HCI began with founding <strong>PerVenture</strong>, a startup exploring
-                        VR-based olfactory interfaces for fragrance shopping. The technical challenges I encountered
-                        there,particularly the gap between digital and chemical modalities,motivated me
-                        to pursue research at the frontier of perceptual engineering.
-                    </p>
-                    <p class="about-goal">
-                        <strong>I am seeking PhD positions</strong> where I can investigate olfactory perception,
-                        chemical interfaces, and multisensory HCI,designing systems that let people sense,
-                        understand, and interact with the chemical world in new ways.
+                        My background spans consumer psychology, VR olfactory interfaces, perceptual engineering,
+                        and chemical sensing. This trajectory led to my current research interests in olfactory
+                        sensing and human-computer interaction.
                     </p>
                 </div>
                 <div class="about-sidebar">
@@ -115,27 +106,47 @@
         <div class="container">
             <h2 class="section-title">Research</h2>
 
+            <div class="research-item research-item-primary">
+                <div class="research-header">
+                    <div class="research-icon" aria-hidden="true">&#9881;</div>
+                    <div>
+                        <div class="status-labels">
+                            <span class="current-label">Current Research</span>
+                            <span class="status-badge">Under Review</span>
+                        </div>
+                        <h3>Osphra: Finding Odor Sources without Mapping Every Point</h3>
+                        <p class="research-meta">Independent Research Project | Aug 2026 - Present</p>
+                        <p class="research-role">Advisor: Prof. Yi Ding, The University of Texas at Dallas</p>
+                    </div>
+                </div>
+                <p class="research-desc">Building a portable electronic nose for real-time volatile compound sensing and odor-source localization without exhaustively mapping an entire space.</p>
+                <ul class="research-details">
+                    <li>Paired a <strong>BME688 MOX gas sensor</strong> with an <strong>ESP32-S3</strong> microcontroller.</li>
+                    <li>Designed distance-based measurement protocols and custom <strong>3D-printed sensor jigs</strong> to standardize airflow and sensor-to-source geometry across trials.</li>
+                    <li>Paired the device with an <strong>ARCore-tracked smartphone</strong> and benchmarked the approach against established gas distribution mapping methods.</li>
+                </ul>
+                <div class="research-tags"><span>BME688</span><span>ESP32-S3</span><span>ARCore</span><span>3D Printing</span><span>Chemical Sensing</span></div>
+            </div>
+
             <div class="research-item">
                 <div class="research-header">
                     <div class="research-icon">&#9880;</div>
                     <div>
-                        <h3>Chemical Safety via Electronic Tongue Technology</h3>
-                        <p class="research-meta">MIT EECS & CSAIL | Advisor: Prof. Jas Brooks | Apr 2025 - Feb 2026</p>
+                        <h3>MIT EECS &amp; CSAIL</h3>
+                        <p class="research-meta">Research Collaborator, Perceptual Engineering | Mar 2025 - Feb 2026</p>
+                        <p class="research-role">Advisor: Prof. Jas Brooks | Remote</p>
                     </div>
                 </div>
                 <p class="research-desc">
-                    Developing an electronic tongue system to prevent hazardous chemical interactions
-                    between household cleaning products. When common products like bleach and toilet bowl
-                    cleaner are mixed, they can produce toxic chlorine gas,our system detects and
-                    warns users before dangerous combinations occur.
+                    Developed a chemical safety system using electronic tongue technology to detect hazardous interactions between household cleaning products.
                 </p>
                 <ul class="research-details">
                     <li>Built a comprehensive dataset of <strong>44 cleaning products</strong> with multiple
-                        ion-selective electrode measurements for training a chemical identification system</li>
+                        ion-selective electrode measurements</li>
                     <li>Designed and implemented <strong>sensor array circuitry</strong> using Arduino-based
                         microcontrollers interfaced with ion-selective electrodes for real-time chemical detection</li>
                     <li>Applied dimensionality reduction techniques (<strong>PCA, t-SNE</strong>) to visualize
-                        chemical signatures and identify discriminative markers across surfactant-based products</li>
+                        chemical signatures and identify discriminative markers despite similar ion signatures across surfactant-based products</li>
                 </ul>
                 <div class="research-tags">
                     <span>Arduino</span><span>Python</span><span>PCA</span><span>t-SNE</span>
@@ -145,37 +156,11 @@
 
             <div class="research-item">
                 <div class="research-header">
-                    <div class="research-icon">&#128067;</div>
-                    <div>
-                        <h3>Vibration Effects on Human Olfactory Directional Perception</h3>
-                        <p class="research-meta">Feb 2026 - Present | In Progress</p>
-                    </div>
-                </div>
-                <p class="research-desc">
-                    Investigated how vibrotactile stimulation of the trigeminal nerve can enhance
-                    human ability to distinguish the spatial direction of odor sources,bridging
-                    somatosensory and olfactory perception.
-                </p>
-                <ul class="research-details">
-                    <li>Applied different <strong>vibration frequencies and patterns</strong> to stimulate
-                        the trigeminal nerve and measured effects on olfactory directional accuracy</li>
-                    <li>Designed and conducted <strong>psychophysical experiments</strong> to quantify
-                        how trigeminal stimulation modulates smell direction discrimination</li>
-                    <li>Explored the <strong>cross-modal interaction</strong> between tactile vibration
-                        and olfactory spatial processing in human participants</li>
-                </ul>
-                <div class="research-tags">
-                    <span>Psychophysics</span><span>Trigeminal Nerve</span><span>Olfactory Perception</span>
-                    <span>Vibrotactile Stimulation</span><span>Experimental Design</span>
-                </div>
-            </div>
-
-            <div class="research-item">
-                <div class="research-header">
                     <div class="research-icon">&#128172;</div>
                     <div>
                         <h3>Consumer Psychology & Linguistic Persuasion</h3>
                         <p class="research-meta">National Science Council, Taiwan | Jul 2023 - Mar 2024</p>
+                        <p class="research-role">Undergraduate Researcher</p>
                     </div>
                 </div>
                 <p class="research-desc">
@@ -199,36 +184,34 @@
         </div>
     </section>
 
+    <section class="section" id="publications">
+        <div class="container">
+            <h2 class="section-title">Publications</h2>
+            <article class="publication-item">
+                <span class="status-badge">Under Review</span>
+                <p class="publication-citation">Fan, H.-J., Yan, X., &amp; Ding, Y. “Demo: Osphra: Finding Odor Sources without Mapping Every Point.” <em>ACM MobiCom 2026</em>.</p>
+            </article>
+        </div>
+    </section>
+
     <!-- Projects Section -->
-    <section class="section" id="projects">
+    <section class="section section-alt" id="projects">
         <div class="container">
             <h2 class="section-title">Entrepreneurial Projects</h2>
 
             <div class="project-card featured">
-                <div class="project-badge">Co-Founder</div>
-                <h3>PerVenture , VR-Olfactory Shopping Platform</h3>
-                <p class="project-period">October 2022 - October 2024 (Paused for graduate studies)</p>
+                <div class="project-badge">Co-Founder &amp; Team Leader</div>
+                <h3>PerVenture: VR-Olfactory Shopping Platform</h3>
+                <p class="project-period">October 2022 - October 2024 | 5-6 member cross-functional team</p>
                 <p class="project-desc">
                     Founded and led a cross-functional team of 5-6 members to develop a VR-based
                     olfactory interface for immersive fragrance shopping,addressing the fundamental
-                    challenge that scent cannot be transmitted digitally.
+                        fragrance shopping.
                 </p>
-                <div class="project-highlights">
-                    <div class="highlight">
-                        <span class="highlight-number">300+</span>
-                        <span class="highlight-label">User research participants</span>
-                    </div>
-                    <div class="highlight">
-                        <span class="highlight-number">80%</span>
-                        <span class="highlight-label">Use fragrance but can't shop online</span>
-                    </div>
-                </div>
                 <ul class="project-details">
-                    <li>Prototyped 3D virtual environments using <strong>Unity & C#</strong> for personalized
-                        perfume consultation</li>
-                    <li>Pitched to angel investors, generating active interest and identifying the critical
-                        technical barrier: olfactory hardware</li>
-                    <li>This experience directly motivated my transition into perceptual engineering and HCI research</li>
+                    <li>Designed and prototyped 3D virtual environments using <strong>Unity &amp; C#</strong> for one-on-one personalized perfume consultation.</li>
+                    <li>Identified the lack of olfactory display hardware as the critical technical barrier.</li>
+                    <li>This experience motivated my transition toward graduate research in perceptual engineering and human-computer interaction.</li>
                 </ul>
                 <div class="research-tags">
                     <span>Unity</span><span>C#</span><span>VR</span>
@@ -240,23 +223,10 @@
     </section>
 
     <!-- Experience Section -->
-    <section class="section section-alt" id="experience">
+    <section class="section" id="experience">
         <div class="container">
             <h2 class="section-title">Professional Experience</h2>
             <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>Research Collaborator</h3>
-                        <p class="timeline-meta">MIT EECS & CSAIL | Advisor: Prof. Jas Brooks | Apr 2025 - Feb 2026</p>
-                        <p>Collaborated on perceptual engineering research spanning two projects:
-                           developed an electronic tongue system to detect hazardous chemical interactions
-                           between household cleaning products for chemical safety, and investigated how
-                           vibration affects human olfactory directional perception. Built sensor array
-                           circuitry, applied machine learning techniques (PCA, t-SNE), and conducted
-                           psychophysical experiments.</p>
-                    </div>
-                </div>
                 <div class="timeline-item">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
@@ -290,49 +260,44 @@
     </section>
 
     <!-- Skills Section -->
-    <section class="section" id="skills">
+    <section class="section section-alt" id="skills">
         <div class="container">
             <h2 class="section-title">Technical Skills</h2>
             <div class="skills-grid">
                 <div class="skill-category">
                     <h3>Programming</h3>
                     <div class="skill-items">
-                        <span>Python</span><span>R</span><span>C#</span><span>MATLAB</span>
+                        <span>Python: data analysis, signal processing, machine learning</span>
+                        <span>R: statistical analysis</span><span>C#: Unity / VR</span>
+                        <span>MATLAB</span><span>C/C++: Arduino &amp; ESP32 firmware</span>
                     </div>
                 </div>
                 <div class="skill-category">
-                    <h3>Hardware & Sensing</h3>
+                    <h3>Hardware &amp; Prototyping</h3>
                     <div class="skill-items">
-                        <span>Arduino</span><span>Ion-Selective Electrodes</span>
-                        <span>Sensor Integration</span><span>Circuit Design</span>
+                        <span>ESP32-S3</span><span>Arduino</span><span>BME688 MOX gas sensors</span>
+                        <span>Ion-selective electrodes</span><span>Sensor array integration</span>
+                        <span>Circuit design</span><span>3D modeling and printing</span>
                     </div>
                 </div>
                 <div class="skill-category">
-                    <h3>Data & Analysis</h3>
+                    <h3>Data Analysis &amp; Visualization</h3>
                     <div class="skill-items">
-                        <span>PCA / t-SNE</span><span>SPSS</span><span>Tableau</span>
-                        <span>Machine Learning</span><span>Signal Processing</span>
+                        <span>PCA</span><span>t-SNE</span><span>Multivariate analysis</span>
+                        <span>SPSS</span><span>Tableau</span>
                     </div>
                 </div>
                 <div class="skill-category">
                     <h3>Research Methods</h3>
                     <div class="skill-items">
-                        <span>Experimental Design</span><span>Psychophysical Testing</span>
-                        <span>User Research</span><span>Survey Design</span>
-                        <span>Multivariate Analysis</span>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>Tools & Platforms</h3>
-                    <div class="skill-items">
-                        <span>Unity (VR)</span><span>Git</span>
-                        <span>Google Analytics</span><span>Excel (Advanced)</span>
+                        <span>User research</span><span>Experimental design</span>
                     </div>
                 </div>
                 <div class="skill-category">
                     <h3>Languages</h3>
                     <div class="skill-items">
-                        <span>English</span><span>Mandarin</span><span>Japanese</span>
+                        <span>Mandarin: Native</span><span>English: Professional</span>
+                        <span>Japanese: Conversational</span>
                     </div>
                 </div>
             </div>
