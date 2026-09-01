@@ -880,7 +880,7 @@ a.contact-card:hover {
     width: 100vw;
     height: 390px;
     transform: translateX(-50%);
-    background-image: url('flower footer.png');
+    background-image: url('assets/footer-meadow.png');
     background-repeat: repeat-x;
     background-position: center bottom;
     background-size: auto 390px;
