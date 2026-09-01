@@ -880,12 +880,20 @@ a.contact-card:hover {
     width: 100vw;
     height: 390px;
     transform: translateX(-50%);
-    background-image: url('assets/footer-meadow.png');
-    background-repeat: repeat-x;
-    background-position: center bottom;
-    background-size: auto 390px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
     pointer-events: none;
     user-select: none;
+}
+
+.footer-meadow img {
+    flex: 0 0 auto;
+    width: auto;
+    height: 390px;
+    margin: 0 -1px;
+    object-fit: contain;
 }
 
 .footer-content {
@@ -989,7 +997,10 @@ a.contact-card:hover {
         width: 100vw;
         height: 310px;
         bottom: -45px;
-        background-size: auto 310px;
+    }
+
+    .footer-meadow img {
+        height: 310px;
     }
 
     .footer-content {
@@ -1057,7 +1068,10 @@ a.contact-card:hover {
         width: 100vw;
         height: 230px;
         bottom: -35px;
-        background-size: auto 230px;
+    }
+
+    .footer-meadow img {
+        height: 230px;
     }
 
     .footer-content {
